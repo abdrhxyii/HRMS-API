@@ -8,6 +8,9 @@ namespace HumanResource.Modals
     {
         [Key]
         public int Id {get; set;}
+        [Required]
+        public int EmployeeID {get; set;} 
+        public virtual EmployeeModal? EmployeeModal {get; set;}
         public DateTime Date {get; set;}
 
         [DisplayFormat(DataFormatString = "{0:hh\\:mm tt}", ApplyFormatInEditMode = true)]
