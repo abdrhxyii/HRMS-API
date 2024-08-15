@@ -4,6 +4,7 @@ using HumanResource.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HumanResource.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240815062459_newfieldupdated")]
+    partial class newfieldupdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -125,9 +128,6 @@ namespace HumanResource.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DepartmentModalDepartmentId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Designation")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -174,8 +174,6 @@ namespace HumanResource.Migrations
                     b.HasKey("EmployeeID");
 
                     b.HasIndex("CityId");
-
-                    b.HasIndex("DepartmentModalDepartmentId");
 
                     b.HasIndex("StateId");
 
@@ -307,11 +305,6 @@ namespace HumanResource.Migrations
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("HumanResource.Modals.DepartmentModal", null)
-                        .WithMany("Employees")
-                        .HasForeignKey("DepartmentModalDepartmentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("HumanResource.Modals.StateModal", "StateModal")
                         .WithMany()
                         .HasForeignKey("StateId")
@@ -344,11 +337,6 @@ namespace HumanResource.Migrations
                     b.Navigation("EmployeeModal");
 
                     b.Navigation("OfficeLocationModal");
-                });
-
-            modelBuilder.Entity("HumanResource.Modals.DepartmentModal", b =>
-                {
-                    b.Navigation("Employees");
                 });
 
             modelBuilder.Entity("HumanResource.Modals.EmployeeModal", b =>

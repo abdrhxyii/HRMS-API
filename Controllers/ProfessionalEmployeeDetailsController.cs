@@ -18,6 +18,10 @@ namespace HumanResource.Controllers
         [HttpPost("")]
         public async Task<ActionResult<ProfessionalEmployeeDetailsModal>> CreateProfessioanEmployeeDeatil(ProfessionalEmployeeDetailsModal professionalEmployeeDetailsModal)
         {
+            var department = await _context.Departments.AnyAsync(d => d.DepartmentId == professionalEmployeeDetailsModal.DepartmentId);
+            if(!department){
+                return NotFound(new { message = "Department Doet Not Exist"});
+            }
             var professionDetail = await _context.ProfessionalEmployeeDetails.FirstOrDefaultAsync(e => e.EmployeeID == professionalEmployeeDetailsModal.EmployeeID);
             if(professionDetail != null){
                 return Conflict(new { message = "Professional details for this employee already exist." });

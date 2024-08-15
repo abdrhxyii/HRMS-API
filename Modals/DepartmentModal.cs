@@ -7,5 +7,6 @@ namespace HumanResource.Modals
         [Key]
         public int DepartmentId {get; set;}
         public string? DepartmentName {get; set;}
+        public ICollection<EmployeeModal> Employees  {get; set;} = new List<EmployeeModal>();
     }
 }

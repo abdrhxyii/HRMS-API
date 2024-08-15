@@ -49,6 +49,15 @@ namespace HumanResource.Controllers
                         
             return Ok(employees);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<EmployeeModal>> DeleteEmployeeById(int id)
+        {
+            var employee = await _context.Employees.FindAsync(id);
+            _context.Employees.Remove(employee);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
         
     }
 }

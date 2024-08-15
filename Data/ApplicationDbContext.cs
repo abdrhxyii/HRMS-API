@@ -41,17 +41,20 @@ namespace HumanResource.Data
             modelBuilder.Entity<EmployeeModal>()
             .HasOne(e => e.ProfessionalEmployeeDetailsModal)
             .WithOne(p => p.EmployeeModal)
-            .HasForeignKey<ProfessionalEmployeeDetailsModal>(p => p.EmployeeID);
+            .HasForeignKey<ProfessionalEmployeeDetailsModal>(p => p.EmployeeID)
+            .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<EmployeeModal>()
             .HasOne(e => e.EmployeeContactModal)
             .WithOne(c => c.EmployeeModal)
-            .HasForeignKey<EmployeeContactModal>(c => c.EmployeeID);
+            .HasForeignKey<EmployeeContactModal>(c => c.EmployeeID)
+            .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<EmployeeModal>()
             .HasMany(e => e.documents)
             .WithOne(d => d.EmployeeModal)
-            .HasForeignKey(d => d.EmployeeID);
+            .HasForeignKey(d => d.EmployeeID)
+            .OnDelete(DeleteBehavior.Cascade); 
 
             // Configuring ProfessionalEmployeeDetailsModal relationships
             modelBuilder.Entity<ProfessionalEmployeeDetailsModal>()

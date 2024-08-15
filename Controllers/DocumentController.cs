@@ -21,5 +21,13 @@ namespace HumanResource.Controllers
             return CreatedAtAction(nameof(CreateDocument), new {id = documentModal.DocumentId}, documentModal);
         }
         
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<DocumentModal>> DeleteDocument(int id)
+        {
+            var document = await _context.Documents.FindAsync(id);
+            _context.Documents.Remove(document);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
     }
 }
