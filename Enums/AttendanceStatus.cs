@@ -4,7 +4,7 @@ namespace HumanResource.Enums
 {
     public enum AttendanceStatus
     {
-        [Display(Name = "OnTime")]
+        [Display(Name = "On Time")]
         OnTime,
         [Display(Name = "Late")]
         Late
