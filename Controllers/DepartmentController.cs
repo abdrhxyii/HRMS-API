@@ -64,6 +64,7 @@ namespace HumanResource.Controllers
                  Employees = _context.ProfessionalEmployeeDetails
                  .Where(p => p.DepartmentId == x.DepartmentId)
                  .Select(x => new DepartmentEmployeeViewModel.EmployeeInfo{
+                    Image = x.EmployeeModal.Image,
                     FirstName = x.EmployeeModal.FirstName,
                     LastName = x.EmployeeModal.LastName,
                     Designation = x.EmployeeModal.Designation

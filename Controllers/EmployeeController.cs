@@ -1,5 +1,6 @@
 using HumanResource.Data;
 using HumanResource.Modals;
+using HumanResource.ViewModals;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 // using Microsoft.AspNetCore.Authorization;
@@ -57,6 +58,25 @@ namespace HumanResource.Controllers
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
             return NoContent();
+        }
+
+        [HttpGet("table/all")]
+        public async Task<ActionResult<IEnumerable<EmployeeTableViewModal>>> GetEmployeeTableView()
+        {
+            var employees = await _context.Employees
+            .Select(x => new EmployeeTableViewModal{
+                EmployeeIdManual = x.EmployeeIdManual,
+                Image = x.Image,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Designation = x.Designation,
+                professionInfos = _context.ProfessionalEmployeeDetails
+                .Select(p => new EmployeeTableViewModal.ProfessionInfo{
+                    EmployeeType = p.EmployeeType,
+                    EmployeeStatus = p.EmployeeStatus
+                }).ToList()
+            }).ToListAsync();
+            return Ok(employees);
         }
         
     }

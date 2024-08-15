@@ -10,6 +10,8 @@ namespace HumanResource.Modals
         [Required]
         public int EmployeeIdManual {get; set;}
 
+        public string? Image {get; set;}
+
         [Required]
         [StringLength(50)]
         public string FirstName { get; set; }

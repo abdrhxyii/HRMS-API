@@ -25,6 +25,7 @@ namespace HumanResource.Data
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
             modelBuilder.Entity<UserModal>().Property(u => u.userRole).HasConversion<string>();
+            modelBuilder.Entity<AttendanceModal>().Property(u => u.AttendanceStatus).HasConversion<string>();
 
             modelBuilder.Entity<EmployeeModal>()
             .HasOne(e => e.CityModal)
