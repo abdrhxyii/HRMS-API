@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace HumanResource.Modals
+namespace HumanResource.Enums
 {
     public enum UserRole
     {

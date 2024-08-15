@@ -12,6 +12,7 @@ namespace HumanResource.Modals
 
         public string? Username { get; set; }
         public string? EmployeeType { get; set; }
+        public string? EmployeeStatus { get; set; }
 
         public int? DepartmentId { get; set; }
         public virtual DepartmentModal? DepartmentModal { get; set; }
