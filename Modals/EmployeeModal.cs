@@ -57,6 +57,8 @@ namespace HumanResource.Modals
 
         public ProfessionalEmployeeDetailsModal? ProfessionalEmployeeDetailsModal {get; set;}
         public EmployeeContactModal? EmployeeContactModal {get; set;}
+        public ICollection<AttendanceModal?> attendances {get; set;}
         public ICollection<DocumentModal?> documents {get; set;}
+        public ICollection<ProjectModal?> projects {get; set;}
     }
 }
