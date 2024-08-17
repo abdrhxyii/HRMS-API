@@ -4,6 +4,7 @@ using HumanResource.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HumanResource.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240817065021_newmodalupdated")]
+    partial class newmodalupdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace HumanResource.Migrations
 
                     b.HasIndex("EmployeeID");
 
-                    b.ToTable("AttendanceModals");
+                    b.ToTable("AttendanceModal");
                 });
 
             modelBuilder.Entity("HumanResource.Modals.CityModal", b =>
@@ -221,44 +224,6 @@ namespace HumanResource.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("HumanResource.Modals.JobModal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("JobStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("JobType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OfficeLocationId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Salary")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.HasIndex("OfficeLocationId");
-
-                    b.ToTable("JobModals");
-                });
-
             modelBuilder.Entity("HumanResource.Modals.OfficeLocationModal", b =>
                 {
                     b.Property<int>("OfficeLocationId")
@@ -351,7 +316,7 @@ namespace HumanResource.Migrations
 
                     b.HasIndex("EmployeeModalEmployeeID");
 
-                    b.ToTable("ProjectModals");
+                    b.ToTable("ProjectModal");
                 });
 
             modelBuilder.Entity("HumanResource.Modals.StateModal", b =>
@@ -447,23 +412,6 @@ namespace HumanResource.Migrations
                     b.Navigation("StateModal");
                 });
 
-            modelBuilder.Entity("HumanResource.Modals.JobModal", b =>
-                {
-                    b.HasOne("HumanResource.Modals.DepartmentModal", "DepartmentModal")
-                        .WithMany("JobModals")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("HumanResource.Modals.OfficeLocationModal", "OfficeLocationModal")
-                        .WithMany()
-                        .HasForeignKey("OfficeLocationId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("DepartmentModal");
-
-                    b.Navigation("OfficeLocationModal");
-                });
-
             modelBuilder.Entity("HumanResource.Modals.ProfessionalEmployeeDetailsModal", b =>
                 {
                     b.HasOne("HumanResource.Modals.DepartmentModal", "DepartmentModal")
@@ -501,8 +449,6 @@ namespace HumanResource.Migrations
             modelBuilder.Entity("HumanResource.Modals.DepartmentModal", b =>
                 {
                     b.Navigation("Employees");
-
-                    b.Navigation("JobModals");
                 });
 
             modelBuilder.Entity("HumanResource.Modals.EmployeeModal", b =>

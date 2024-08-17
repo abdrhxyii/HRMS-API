@@ -1,4 +1,5 @@
 using HumanResource.Data;
+using HumanResource.DTOs;
 using HumanResource.Modals;
 using HumanResource.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,24 @@ namespace HumanResource.Controllers
         {
             _context.Departments.Add(departmentModal);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(CreateDepartment), new {id = departmentModal.DepartmentId}, departmentModal);
+            return CreatedAtAction(nameof(GetDepartmentById), new {id = departmentModal.DepartmentId}, departmentModal);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DepartmentModal>> GetDepartmentById (int id )
+        {
+            var department = await _context.Departments
+            .Where(x => x.DepartmentId == id)
+            .Select(x => new {
+                x.DepartmentId,
+                x.DepartmentName
+            }).FirstOrDefaultAsync();
+
+            if(department == null)
+            {
+                return NotFound();
+            }
+            return Ok(department);
         }
 
         [HttpDelete("{id}")]
@@ -31,6 +49,7 @@ namespace HumanResource.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
         [HttpGet("")]
         public async Task<ActionResult<IEnumerable<DepartmentModal>>> DetAllDepartment()
         {

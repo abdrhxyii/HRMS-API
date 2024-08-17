@@ -51,6 +51,20 @@ namespace HumanResource.Controllers
             return Ok(employees);
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EmployeeModal>> GetEmployeeById (int id)
+        {
+            var employee = await _context.Employees
+            .Include(e => e.ProfessionalEmployeeDetailsModal)
+            .Include(d => d.EmployeeContactModal)
+            .Include(xi => xi.documents)
+            .FirstOrDefaultAsync(x => x.EmployeeID == id);
+            if(employee == null){
+                return NotFound();
+            }
+            return Ok(employee);
+        }
+
         [HttpDelete("{id}")]
         public async Task<ActionResult<EmployeeModal>> DeleteEmployeeById(int id)
         {
