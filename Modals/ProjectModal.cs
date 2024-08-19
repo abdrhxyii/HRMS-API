@@ -18,7 +18,7 @@ namespace HumanResource.Modals
         [Required]
         public DateTime EndDate {get; set;}
 
-        [EnumDataType(typeof(AttendanceStatus))]
+        [EnumDataType(typeof(ProjectStatus))]
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ProjectStatus? ProjectStatus {get; set;}        
     }
