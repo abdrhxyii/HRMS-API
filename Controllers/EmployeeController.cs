@@ -46,6 +46,8 @@ namespace HumanResource.Controllers
             .Include(e => e.ProfessionalEmployeeDetailsModal)
             .Include(ei => ei.EmployeeContactModal)
             .Include(o => o.documents)
+            .Include(x => x.attendances)
+            .Include(i => i.projects)
             .ToListAsync();
                         
             return Ok(employees);

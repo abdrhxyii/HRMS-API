@@ -18,18 +18,19 @@ namespace HumanResource.Controllers
         [HttpPost("")]
         public async Task<ActionResult<JobModal>> CreateJobPost ([FromBody] JobModal jobModal)
         {
-            _context.JobModals.Add(jobModal);
+            _context.Jobs.Add(jobModal);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(CreateJobPost), new {id = jobModal.Id }, jobModal);
+            return CreatedAtAction(nameof(CreateJobPost), new {id = jobModal.JobID }, jobModal);
         }
 
         [HttpGet("")]
         public async Task<ActionResult<IEnumerable<JobModal>>> GetJobs ()
         {
-            var jobs = await _context.JobModals
+            var jobs = await _context.Jobs
             .Include(x => x.DepartmentModal)
             .Include(e => e.OfficeLocationModal)
             .Select(x => new {
+                x.JobID,
                 x.Title,
                 x.DepartmentModal.DepartmentName,
                 x.OfficeLocationModal.LocationName,

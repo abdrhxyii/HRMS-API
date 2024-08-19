@@ -1,0 +1,7 @@
+D:\IT projects\Freelance\HumanResource\obj\Release\net7.0\HumanResource.csproj.AssemblyReference.cache
+D:\IT projects\Freelance\HumanResource\obj\Release\net7.0\HumanResource.GeneratedMSBuildEditorConfig.editorconfig
+D:\IT projects\Freelance\HumanResource\obj\Release\net7.0\HumanResource.AssemblyInfoInputs.cache
+D:\IT projects\Freelance\HumanResource\obj\Release\net7.0\HumanResource.AssemblyInfo.cs
+D:\IT projects\Freelance\HumanResource\obj\Release\net7.0\HumanResource.csproj.CoreCompileInputs.cache
+D:\IT projects\Freelance\HumanResource\obj\Release\net7.0\HumanResource.MvcApplicationPartsAssemblyInfo.cs
+D:\IT projects\Freelance\HumanResource\obj\Release\net7.0\HumanResource.MvcApplicationPartsAssemblyInfo.cache

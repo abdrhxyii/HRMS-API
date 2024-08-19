@@ -4,6 +4,7 @@ using HumanResource.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HumanResource.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240819144844_modalupdated")]
+    partial class modalupdated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,52 +58,7 @@ namespace HumanResource.Migrations
 
                     b.HasIndex("EmployeeID");
 
-                    b.ToTable("Attendances");
-                });
-
-            modelBuilder.Entity("HumanResource.Modals.CandidateModal", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("AppliedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("AppliedFor")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CandidateName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CandidateStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("JobID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MobileNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobID");
-
-                    b.ToTable("Candidates");
+                    b.ToTable("AttendanceModals");
                 });
 
             modelBuilder.Entity("HumanResource.Modals.CityModal", b =>
@@ -268,11 +226,11 @@ namespace HumanResource.Migrations
 
             modelBuilder.Entity("HumanResource.Modals.JobModal", b =>
                 {
-                    b.Property<int>("JobID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("DepartmentId")
                         .HasColumnType("int");
@@ -295,13 +253,13 @@ namespace HumanResource.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("JobID");
+                    b.HasKey("Id");
 
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("OfficeLocationId");
 
-                    b.ToTable("Jobs");
+                    b.ToTable("JobModals");
                 });
 
             modelBuilder.Entity("HumanResource.Modals.OfficeLocationModal", b =>
@@ -393,7 +351,7 @@ namespace HumanResource.Migrations
 
                     b.HasIndex("EmployeeID");
 
-                    b.ToTable("Projects");
+                    b.ToTable("ProjectModals");
                 });
 
             modelBuilder.Entity("HumanResource.Modals.StateModal", b =>
@@ -445,16 +403,6 @@ namespace HumanResource.Migrations
                         .IsRequired();
 
                     b.Navigation("EmployeeModal");
-                });
-
-            modelBuilder.Entity("HumanResource.Modals.CandidateModal", b =>
-                {
-                    b.HasOne("HumanResource.Modals.JobModal", "JobModal")
-                        .WithMany("candidateModals")
-                        .HasForeignKey("JobID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.Navigation("JobModal");
                 });
 
             modelBuilder.Entity("HumanResource.Modals.DocumentModal", b =>
@@ -569,11 +517,6 @@ namespace HumanResource.Migrations
                     b.Navigation("documents");
 
                     b.Navigation("projects");
-                });
-
-            modelBuilder.Entity("HumanResource.Modals.JobModal", b =>
-                {
-                    b.Navigation("candidateModals");
                 });
 #pragma warning restore 612, 618
         }

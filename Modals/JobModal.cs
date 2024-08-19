@@ -5,7 +5,7 @@ namespace HumanResource.Modals
     public class JobModal
     {
         [Key]
-        public int Id {get; set;}
+        public int JobID {get; set;}
         [Required]
         public string Title {get; set;}
         public int? DepartmentId {get; set;}
@@ -18,5 +18,6 @@ namespace HumanResource.Modals
         public string JobStatus {get; set;} // Active / InActive / Completed
         [Required]
         public string JobType {get; set;} // Office /WFH
+        public ICollection<CandidateModal> candidateModals {get; set;} = new List<CandidateModal>();
     }
 }
