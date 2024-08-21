@@ -21,6 +21,7 @@
             public DbSet<AttendanceModal> Attendances {get; set;}
             public DbSet<JobModal> Jobs {get; set;}
             public DbSet<CandidateModal> Candidates {get; set;}
+            public DbSet<PayrollModal> Payrolls {get; set;}
 
             protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
@@ -28,10 +29,12 @@
                 {
                     relationship.DeleteBehavior = DeleteBehavior.Restrict;
                 }
+
                 modelBuilder.Entity<UserModal>().Property(u => u.userRole).HasConversion<string>();
                 modelBuilder.Entity<AttendanceModal>().Property(u => u.AttendanceStatus).HasConversion<string>();
                 modelBuilder.Entity<ProjectModal>().Property(u => u.ProjectStatus).HasConversion<string>();
                 modelBuilder.Entity<CandidateModal>().Property(u => u.CandidateStatus).HasConversion<string>();
+                modelBuilder.Entity<PayrollModal>().Property(u => u.PayrollStatus).HasConversion<string>();
 
                 modelBuilder.Entity<EmployeeModal>()
                 .HasOne(e => e.CityModal)
@@ -95,6 +98,19 @@
                 .WithOne(i => i.JobModal)
                 .HasForeignKey(xi => xi.JobID)
                 .OnDelete(DeleteBehavior.Cascade);
+
+                modelBuilder.Entity<PayrollModal>()
+                .HasOne(e => e.EmployeeModal)
+                .WithOne()
+                .HasForeignKey<PayrollModal>(p => p.EmployeeID)
+                .OnDelete(DeleteBehavior.Cascade);
+
+                 modelBuilder.Entity<EmployeeModal>()
+                .HasOne<PayrollModal>()
+                .WithOne()
+                .HasForeignKey<PayrollModal>(p => p.EmployeeID)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
                 // Configuring ProfessionalEmployeeDetailsModal relationships
                 modelBuilder.Entity<ProfessionalEmployeeDetailsModal>()
