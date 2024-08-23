@@ -26,6 +26,16 @@ namespace HumanResource.Controllers
             if(employee == null){
                 return NotFound("No Employee Found");
             }
+
+            var exitingPayrolls = _context.Payrolls.FirstOrDefaultAsync(x => x.EmployeeID == payrollModal.EmployeeID);
+            if(exitingPayrolls != null)
+            {
+                 return BadRequest($"Only One Payroll Can be Assigned/Created for '{payrollModal.EmployeeID}'");
+            }
+            // if(employee != null)
+            // {
+            //     return BadRequest($"Only One Payroll Can be Assigned/Created for '{payrollModal.EmployeeID}'");
+            // }
             _context.Payrolls.Add(payrollModal);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(CreatePayroll), new {id = payrollModal.PayrollID}, payrollModal);
@@ -38,6 +48,7 @@ namespace HumanResource.Controllers
             .Include(p => p.EmployeeModal)
             .Select(x => new {
                 x.PayrollID,
+                x.EmployeeModal.EmployeeID,
                 x.EmployeeModal.FirstName,
                 x.EmployeeModal.LastName,
                 x.CostToCompany,
