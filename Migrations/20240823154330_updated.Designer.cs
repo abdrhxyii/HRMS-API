@@ -4,6 +4,7 @@ using HumanResource.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HumanResource.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240823154330_updated")]
+    partial class updated
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -337,6 +340,9 @@ namespace HumanResource.Migrations
                     b.Property<int?>("EmployeeID")
                         .HasColumnType("int");
 
+                    b.Property<int?>("EmployeeModalEmployeeID")
+                        .HasColumnType("int");
+
                     b.Property<int>("MonthlySalary")
                         .HasColumnType("int");
 
@@ -349,6 +355,8 @@ namespace HumanResource.Migrations
                     b.HasIndex("EmployeeID")
                         .IsUnique()
                         .HasFilter("[EmployeeID] IS NOT NULL");
+
+                    b.HasIndex("EmployeeModalEmployeeID");
 
                     b.ToTable("Payrolls");
                 });
@@ -551,10 +559,14 @@ namespace HumanResource.Migrations
 
             modelBuilder.Entity("HumanResource.Modals.PayrollModal", b =>
                 {
-                    b.HasOne("HumanResource.Modals.EmployeeModal", "EmployeeModal")
-                        .WithOne("Payrolls")
+                    b.HasOne("HumanResource.Modals.EmployeeModal", null)
+                        .WithOne()
                         .HasForeignKey("HumanResource.Modals.PayrollModal", "EmployeeID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("HumanResource.Modals.EmployeeModal", "EmployeeModal")
+                        .WithMany()
+                        .HasForeignKey("EmployeeModalEmployeeID");
 
                     b.Navigation("EmployeeModal");
                 });
@@ -604,9 +616,6 @@ namespace HumanResource.Migrations
             modelBuilder.Entity("HumanResource.Modals.EmployeeModal", b =>
                 {
                     b.Navigation("EmployeeContactModal");
-
-                    b.Navigation("Payrolls")
-                        .IsRequired();
 
                     b.Navigation("ProfessionalEmployeeDetailsModal");
 

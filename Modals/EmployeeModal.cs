@@ -60,5 +60,6 @@ namespace HumanResource.Modals
         public ICollection<AttendanceModal?> attendances {get; set;}
         public ICollection<DocumentModal?> documents {get; set;}
         public ICollection<ProjectModal?> projects {get; set;}
+        public PayrollModal Payrolls {get; set;}
     }
 }
