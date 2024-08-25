@@ -1,5 +1,9 @@
 using System.Text.Json.Serialization;
 using HumanResource.Data;
+using HumanResource.Interfaces.IRepositories;
+using HumanResource.Interfaces.IServices;
+using HumanResource.Repositories;
+using HumanResource.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +22,9 @@ options.UseSqlServer(GetConnectionString)
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 var app = builder.Build();
 
