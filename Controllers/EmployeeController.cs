@@ -1,9 +1,11 @@
 using HumanResource.Data;
+using HumanResource.Exceptions;
+using HumanResource.Interfaces.IRepositories;
+using HumanResource.Interfaces.IServices;
 using HumanResource.Modals;
 using HumanResource.ViewModals;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-// using Microsoft.AspNetCore.Authorization;
 
 namespace HumanResource.Controllers
 {
@@ -11,10 +13,10 @@ namespace HumanResource.Controllers
     [ApiController]
     public class EmployeeController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        public EmployeeController(ApplicationDbContext context)
+        private readonly IEmployeeService _employeeService;
+        public EmployeeController(IEmployeeService employeeService)
         {
-            _context = context;
+            _employeeService = employeeService;
         }
 
         [HttpPost("")]
@@ -23,15 +25,12 @@ namespace HumanResource.Controllers
         {
             try
             {
-                if(employeeModal.CityId == null){
-                    return BadRequest("Please select a city");
-                }
-                if(employeeModal.StateId == null){
-                    return BadRequest("Please select a state");
-                }
-                _context.Employees.Add(employeeModal);
-                await _context.SaveChangesAsync();
-                return CreatedAtAction(nameof(CreateEmployee), new { id = employeeModal.EmployeeID }, employeeModal);
+                var employee = await _employeeService.AddEmplyeeAsync(employeeModal);
+                return CreatedAtAction(nameof(GetEmployeeById), new {id = employee.EmployeeID}, employee);
+            }
+            catch(ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch(Exception ex)
             {
@@ -39,60 +38,79 @@ namespace HumanResource.Controllers
             }
         }
 
-        [HttpGet("all")]
+        [HttpGet("")]
         public async Task<ActionResult<IEnumerable<EmployeeModal>>> GetAllEmployee ()
         {
-            var employees = await _context.Employees
-            .Include(e => e.ProfessionalEmployeeDetailsModal)
-            .Include(ei => ei.EmployeeContactModal)
-            .Include(o => o.documents)
-            .Include(x => x.attendances)
-            .Include(i => i.projects)
-            .ToListAsync();
-                        
-            return Ok(employees);
+            try
+            {
+                var employee = await _employeeService.GetAllEmployeeAsync();
+                return Ok(employee);
+            }
+            catch(NotFoundException notfound)
+            {
+                return NotFound(notfound.Message);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<EmployeeModal>> GetEmployeeById (int id)
         {
-            var employee = await _context.Employees
-            .Include(e => e.ProfessionalEmployeeDetailsModal)
-            .Include(d => d.EmployeeContactModal)
-            .Include(xi => xi.documents)
-            .FirstOrDefaultAsync(x => x.EmployeeID == id);
-            if(employee == null){
-                return NotFound();
+            try
+            {
+                var employee = await _employeeService.GetEmployeeByIdAsync(id);
+                return Ok(employee);
             }
-            return Ok(employee);
+            catch(NotFoundException notfound)
+            {
+                return NotFound(notfound.Message);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<EmployeeModal>> DeleteEmployeeById(int id)
         {
-            var employee = await _context.Employees.FindAsync(id);
-            _context.Employees.Remove(employee);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                var employee = await _employeeService.DeleteEmployeeByIdAsync(id);
+                if(employee)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
-        [HttpGet("table/all")]
+        [HttpGet("table")]
         public async Task<ActionResult<IEnumerable<EmployeeTableViewModal>>> GetEmployeeTableView()
         {
-            var employees = await _context.Employees
-            .Select(x => new EmployeeTableViewModal{
-                EmployeeIdManual = x.EmployeeIdManual,
-                Image = x.Image,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Designation = x.Designation,
-                professionInfos = _context.ProfessionalEmployeeDetails
-                .Select(p => new EmployeeTableViewModal.ProfessionInfo{
-                    EmployeeType = p.EmployeeType,
-                    EmployeeStatus = p.EmployeeStatus
-                }).ToList()
-            }).ToListAsync();
-            return Ok(employees);
+            try
+            {
+                var employee = await _employeeService.EmployeeViewTable();
+                return Ok(employee);
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
         
     }
