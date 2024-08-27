@@ -1,5 +1,6 @@
 using HumanResource.Data;
 using HumanResource.DTOs;
+using HumanResource.Interfaces.IServices;
 using HumanResource.Modals;
 using HumanResource.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,12 @@ namespace HumanResource.Controllers
     [ApiController]
     public class DepartmentController : ControllerBase
     {
+        private readonly IDepartmentService _departmentService;
         private readonly ApplicationDbContext _context;
-        public DepartmentController(ApplicationDbContext context)
+        public DepartmentController(ApplicationDbContext context, IDepartmentService departmentService)
         {
             _context = context;
+            _departmentService = departmentService;
         }
         [HttpPost("")]
         public async Task<ActionResult<DepartmentModal>> CreateDepartment (DepartmentModal departmentModal)

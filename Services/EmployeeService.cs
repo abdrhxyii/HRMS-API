@@ -51,6 +51,10 @@ namespace HumanResource.Services
         public async Task<IEnumerable<EmployeeTableViewModal>> EmployeeViewTable()
         {
             var employees = await _employeeRepository.FindAllEmployee();
+            if(employees.Count() == 0)
+            {
+                throw new NotFoundException("No Employee Found");
+            }
             return employees.Select(x => new EmployeeTableViewModal{
                 EmployeeIdManual = x.EmployeeIdManual,
                 Image = x.Image,
