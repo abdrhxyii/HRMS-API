@@ -74,3 +74,8 @@ D:\IT projects\Freelance\HumanResource\obj\Debug\net7.0\refint\HumanResource.dll
 D:\IT projects\Freelance\HumanResource\obj\Debug\net7.0\HumanResource.pdb
 D:\IT projects\Freelance\HumanResource\obj\Debug\net7.0\HumanResource.genruntimeconfig.cache
 D:\IT projects\Freelance\HumanResource\obj\Debug\net7.0\ref\HumanResource.dll
+D:\IT projects\Freelance\HumanResource\bin\Debug\net7.0\out\web.config
+D:\IT projects\Freelance\HumanResource\bin\Debug\net7.0\out\appsettings.Development.json
+D:\IT projects\Freelance\HumanResource\bin\Debug\net7.0\out\appsettings.json
+D:\IT projects\Freelance\HumanResource\bin\Debug\net7.0\out\HumanResource.deps.json
+D:\IT projects\Freelance\HumanResource\bin\Debug\net7.0\out\HumanResource.runtimeconfig.json

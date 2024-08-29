@@ -1,6 +1,7 @@
 using HumanResource.Data;
 using HumanResource.Interfaces.IRepositories;
 using HumanResource.Modals;
+using Microsoft.EntityFrameworkCore;
 
 namespace HumanResource.Repositories
 {
@@ -11,9 +12,16 @@ namespace HumanResource.Repositories
         {
             _context = context;
         }
-        public Task<ProfessionalEmployeeDetailsModal> AddProfession(ProfessionalEmployeeDetailsModal professionalEmployeeDetailsModal)
+        public async Task<ProfessionalEmployeeDetailsModal> AddProfession(ProfessionalEmployeeDetailsModal professionalEmployeeDetailsModal)
         {
-            throw new NotImplementedException();
+            _context.ProfessionalEmployeeDetails.Add(professionalEmployeeDetailsModal);
+            await _context.SaveChangesAsync();
+            return professionalEmployeeDetailsModal;
         }
+        public async Task<ProfessionalEmployeeDetailsModal?> FindEmployeeProfession(int id)
+        {
+            return await _context.ProfessionalEmployeeDetails.FirstOrDefaultAsync(x => x.EmployeeID == id);
+        }
+
     }
 }
