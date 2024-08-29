@@ -1,4 +1,6 @@
 using HumanResource.Data;
+using HumanResource.Exceptions;
+using HumanResource.Interfaces.IServices;
 using HumanResource.Modals;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,25 +12,33 @@ namespace HumanResource.Controllers
     public class ProfessionalEmployeeDetailsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public ProfessionalEmployeeDetailsController(ApplicationDbContext context)
+        private readonly IProfessionalEmployeeDetailsService _professionService;
+        public ProfessionalEmployeeDetailsController(ApplicationDbContext context, IProfessionalEmployeeDetailsService professionService)
         {
             _context = context;
+            _professionService = professionService;
         }
 
         [HttpPost("")]
         public async Task<ActionResult<ProfessionalEmployeeDetailsModal>> CreateProfessioanEmployeeDeatil(ProfessionalEmployeeDetailsModal professionalEmployeeDetailsModal)
         {
-            var department = await _context.Departments.AnyAsync(d => d.DepartmentId == professionalEmployeeDetailsModal.DepartmentId);
-            if(!department){
-                return NotFound(new { message = "Department Doet Not Exist"});
+            try
+            {
+                await _professionService.AddProfessionAsync(professionalEmployeeDetailsModal);
+                return CreatedAtAction(nameof(CreateProfessioanEmployeeDeatil), new {id = professionalEmployeeDetailsModal.Id}, professionalEmployeeDetailsModal);
             }
-            var professionDetail = await _context.ProfessionalEmployeeDetails.FirstOrDefaultAsync(e => e.EmployeeID == professionalEmployeeDetailsModal.EmployeeID);
-            if(professionDetail != null){
-                return Conflict(new { message = "Professional details for this employee already exist." });
+            catch(NotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
-            _context.ProfessionalEmployeeDetails.Add(professionalEmployeeDetailsModal);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(CreateProfessioanEmployeeDeatil), new {id = professionalEmployeeDetailsModal.Id}, professionalEmployeeDetailsModal);
+            catch(InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message); 
+            }
         }
         
     }
