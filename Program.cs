@@ -29,6 +29,10 @@ builder.Services.AddScoped<IProfessionalEmployeeDetailsRepository, ProfessionalE
 builder.Services.AddScoped<IProfessionalEmployeeDetailsService, ProfessionalEmployeeDetailsService>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IStateRepository, StateRepository>();
+builder.Services.AddScoped<IStateService, StateService>();
 
 var app = builder.Build();
 

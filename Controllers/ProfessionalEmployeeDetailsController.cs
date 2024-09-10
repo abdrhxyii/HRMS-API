@@ -3,7 +3,6 @@ using HumanResource.Exceptions;
 using HumanResource.Interfaces.IServices;
 using HumanResource.Modals;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace HumanResource.Controllers
 {
@@ -11,11 +10,9 @@ namespace HumanResource.Controllers
     [ApiController]
     public class ProfessionalEmployeeDetailsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
         private readonly IProfessionalEmployeeDetailsService _professionService;
         public ProfessionalEmployeeDetailsController(ApplicationDbContext context, IProfessionalEmployeeDetailsService professionService)
         {
-            _context = context;
             _professionService = professionService;
         }
 
