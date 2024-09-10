@@ -1,4 +1,6 @@
 using HumanResource.Data;
+using HumanResource.Exceptions;
+using HumanResource.Interfaces.IServices;
 using HumanResource.Modals;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,28 +9,32 @@ namespace HumanResource.Controllers
     [Route("project")]
     public class ProjectController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;   
-        public ProjectController(ApplicationDbContext context)
+        private readonly IProjectService _projectService;
+        public ProjectController(IProjectService projectService)
         {
-            _context = context;
+            _projectService = projectService;
         }
 
         [HttpPost("")]
         public async Task<ActionResult<ProjectModal>> CreateProject ([FromBody] ProjectModal projectModal)
         {
-            if(string.IsNullOrEmpty(projectModal.ProjectName)){
-                return BadRequest("Please enter a valid project name");
+            try
+            {
+                var project = await _projectService.AddProjectAsync(projectModal);
+                return CreatedAtAction(nameof(CreateProject), new {id = projectModal.Id}, projectModal);
             }
-            _context.Projects.Add(projectModal);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(CreateProject), new {id = projectModal.Id}, projectModal);
+            catch(NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch(InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status422UnprocessableEntity, ex);
+            }
         }
-
-        // [HttpGet("{id}")]
-        // public async Task<ActionResult<IEnumerable<ProjectModal>>> GetProjectsByEmployee(int id)
-        // {
-        //     // var projects = await _context.
-        // }
-        
     }
 }
