@@ -33,6 +33,8 @@ builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IStateRepository, StateRepository>();
 builder.Services.AddScoped<IStateService, StateService>();
+builder.Services.AddScoped<IPayrollRepository, PayrollRepository>();
+builder.Services.AddScoped<IPayrollService, PayrollService>();
 
 var app = builder.Build();
 
