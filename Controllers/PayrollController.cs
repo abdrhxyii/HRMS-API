@@ -1,4 +1,6 @@
 using HumanResource.Data;
+using HumanResource.Exceptions;
+using HumanResource.Interfaces.IServices;
 using HumanResource.Modals;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,35 +12,37 @@ namespace HumanResource.Controllers
     public class PayrollController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public PayrollController(ApplicationDbContext context)
+        private readonly IPayrollService _payrollService;
+        public PayrollController(ApplicationDbContext context, IPayrollService payrollService)
         {
             _context = context;
+            _payrollService = payrollService;
         }
 
         [HttpPost("")]
         public async Task<ActionResult<PayrollModal>> CreatePayroll(PayrollModal payrollModal)
         {
-            var employee = await _context.Employees.FindAsync(payrollModal.EmployeeID);
-            if(payrollModal.EmployeeID == null)
+            try
             {
-                return BadRequest("Please include the employee in the body");
+                await _payrollService.AddPayrollAsync(payrollModal);
+                return CreatedAtAction(nameof(CreatePayroll), new {id = payrollModal.PayrollID}, payrollModal);
             }
-            if(employee == null){
-                return NotFound("No Employee Found");
-            }
-
-            var exitingPayrolls = _context.Payrolls.FirstOrDefaultAsync(x => x.EmployeeID == payrollModal.EmployeeID);
-            if(exitingPayrolls != null)
+            catch (InvalidOperationException ex)
             {
-                 return BadRequest($"Only One Payroll Can be Assigned/Created for '{payrollModal.EmployeeID}'");
+                return BadRequest(ex.Message);
             }
-            // if(employee != null)
-            // {
-            //     return BadRequest($"Only One Payroll Can be Assigned/Created for '{payrollModal.EmployeeID}'");
-            // }
-            _context.Payrolls.Add(payrollModal);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(CreatePayroll), new {id = payrollModal.PayrollID}, payrollModal);
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch(NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpGet("")]
@@ -62,14 +66,21 @@ namespace HumanResource.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<PayrollModal>> DeletePayroll (int id)
         {
-            var payroll = await _context.Payrolls.FindAsync(id);
-            if(payroll == null)
+            try
             {
-                return NotFound();
+                var payroll = await _payrollService.RemoveAsync(id);
+                if(payroll)
+                {   
+                    return NoContent();
+                }else 
+                {
+                     return NotFound();
+                }
             }
-            _context.Payrolls.Remove(payroll);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
         
     }
