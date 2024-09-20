@@ -49,5 +49,11 @@ namespace HumanResource.Repositories
         {
             return await _context.Payrolls.FindAsync(id);
         }
+
+        public Task<IEnumerable<PayrollModal>> GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

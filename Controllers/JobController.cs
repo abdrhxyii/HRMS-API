@@ -1,4 +1,6 @@
 using HumanResource.Data;
+using HumanResource.DTOs;
+using HumanResource.Interfaces.IServices;
 using HumanResource.Modals;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,36 +11,38 @@ namespace HumanResource.Controllers
     [ApiController]
     public class JobController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-        public JobController(ApplicationDbContext context)
+        private readonly IJobService _jobService;
+        public JobController(IJobService jobService)
         {
-            _context = context;
+            _jobService = jobService;
         }
 
         [HttpPost("")]
         public async Task<ActionResult<JobModal>> CreateJobPost ([FromBody] JobModal jobModal)
         {
-            _context.Jobs.Add(jobModal);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(CreateJobPost), new {id = jobModal.JobID }, jobModal);
+            try
+            {
+                await _jobService.AddAsync(jobModal);
+                return CreatedAtAction(nameof(CreateJobPost), new {id = jobModal.JobID }, jobModal);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<IEnumerable<JobModal>>> GetJobs ()
+        public async Task<ActionResult<IEnumerable<JobDTO>>> GetJobs ()
         {
-            var jobs = await _context.Jobs
-            .Include(x => x.DepartmentModal)
-            .Include(e => e.OfficeLocationModal)
-            .Select(x => new {
-                x.JobID,
-                x.Title,
-                x.DepartmentModal.DepartmentName,
-                x.OfficeLocationModal.LocationName,
-                x.Salary,
-                x.JobStatus,
-                x.JobType
-            }).ToListAsync();
-            return Ok(jobs);
+            try
+            {
+                var jobs = await _jobService.GetAllAsync();
+                return Ok(jobs);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         

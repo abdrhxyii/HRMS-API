@@ -38,12 +38,7 @@ namespace HumanResource.Services
 
         public async Task<IEnumerable<PayrollModal>> GetAllAsync()
         {
-            var payroll = await _payrollRepo.GetAll();
-            if(!payroll.Any())
-            {
-                throw new NotFoundException("Payroll Does not exits");
-            }
-            return payroll;
+            throw new NotImplementedException();
         }
 
         public async Task<bool> RemoveAsync(int id)

@@ -35,6 +35,12 @@ builder.Services.AddScoped<IStateRepository, StateRepository>();
 builder.Services.AddScoped<IStateService, StateService>();
 builder.Services.AddScoped<IPayrollRepository, PayrollRepository>();
 builder.Services.AddScoped<IPayrollService, PayrollService>();
+builder.Services.AddScoped<IOfficeLocationRepository, OfficeLocationRepository>();
+builder.Services.AddScoped<IOfficeLocationService, OfficeLocationService>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<IJobService, JobService>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+builder.Services.AddScoped<IDocumentService, DocumentService>();
 
 var app = builder.Build();
 
